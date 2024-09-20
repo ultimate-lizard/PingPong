@@ -10,6 +10,9 @@ class PINGPONG_API APongPlayerStart : public APlayerStart
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	ACameraActor* PlayerCamera;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int64 PlayerIndex;
 };
