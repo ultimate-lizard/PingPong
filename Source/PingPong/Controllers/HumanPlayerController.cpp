@@ -4,12 +4,14 @@
 #include "EnhancedInputComponent.h"
 #include "GameFramework/GameState.h"
 #include "GameModes/PongGameMode.h"
+#include "Blueprint/UserWidget.h"
 
 AHumanPlayerController::AHumanPlayerController()
 {
 	DefaultMappingContext = nullptr;
 	MovementAction = nullptr;
 	InputSensitivity = 10.0f;
+	HUDWidget = nullptr;
 }
 
 void AHumanPlayerController::BeginPlay()
@@ -24,6 +26,11 @@ void AHumanPlayerController::BeginPlay()
 	if (UEnhancedInputLocalPlayerSubsystem* InputSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
 		InputSubsystem->AddMappingContext(DefaultMappingContext, 0);
+	}
+
+	if (HUDWidget)
+	{
+		HUDWidget->AddToViewport();
 	}
 }
 

@@ -8,21 +8,21 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/GameState.h"
 #include "GameFramework/PlayerState.h"
+#include "GameStates/PongGameState.h"
 
 APongGameMode::APongGameMode()
 {
 	MaxPlayers = 2;
 	MatchStartDelay = 5.0f;
 	RoundStartDelay = 3.0f;
+	GameCommenceDelay = 1.0f;
 	bMatchInProgress = false;
 	Ball = nullptr;
 }
 
 void APongGameMode::StartPlay()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Waiting for players"));
-
-	SetPlayersInputEnabled(false);
+	Super::StartPlay();
 
 	Ball = Cast<ABall>(UGameplayStatics::GetActorOfClass(GetWorld(), ABall::StaticClass()));
 }
@@ -66,7 +66,6 @@ void APongGameMode::PreLogin(const FString& Options, const FString& Address, con
 {
 	if (GetNumPlayers() >= MaxPlayers)
 	{
-		ErrorMessage = FString(TEXT("The server is full"));
 		FGameModeEvents::GameModePreLoginEvent.Broadcast(this, UniqueId, ErrorMessage);
 		return;
 	}
@@ -80,21 +79,33 @@ void APongGameMode::PostLogin(APlayerController* NewPlayer)
 
 	if (GetNumPlayers() >= MaxPlayers)
 	{
-		StartMatch();
+		if (UWorld* World = GetWorld())
+		{
+			World->GetTimerManager().SetTimer(MatchDelayTimer, this, &APongGameMode::StartMatch, GameCommenceDelay, false);
+		}
+	}
+
+	if (NewPlayer)
+	{
+		if (APawn* NewPlayerPawn = NewPlayer->GetPawn())
+		{
+			NewPlayerPawn->DisableInput(NewPlayer);
+		}
 	}
 }
 
 void APongGameMode::StartMatch()
 {
-	Super::StartPlay();
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Match has started"));
-
 	bMatchInProgress = true;
 
 	if (UWorld* World = GetWorld())
 	{
 		World->GetTimerManager().SetTimer(MatchDelayTimer, this, &APongGameMode::StartRound, MatchStartDelay, false);
+	}
+
+	if (APongGameState* PongGameState = GetGameState<APongGameState>())
+	{
+		PongGameState->BroadcastMatchStartEvent();
 	}
 }
 
@@ -105,28 +116,33 @@ bool APongGameMode::IsMatchInProgress() const
 
 void APongGameMode::Score(int32 LostPlayerIndex)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Score!"));
-
-	SetPlayersInputEnabled(false);
+	// SetPlayersInputEnabled(false);
 
 	Ball->ResetBall();
-	ResetPlayers();
 
 	if (UWorld* World = GetWorld())
 	{
 		World->GetTimerManager().SetTimer(MatchDelayTimer, this, &APongGameMode::StartRound, RoundStartDelay, false);
 	}
+
+	if (APongGameState* PongGameState = GetGameState<APongGameState>())
+	{
+		PongGameState->BroadcastOnScoreEvent(LostPlayerIndex);
+	}
 }
 
 void APongGameMode::StartRound()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Round has started"));
-
 	SetPlayersInputEnabled(true);
 
 	if (Ball)
 	{
 		Ball->ActivateBall();
+	}
+
+	if (APongGameState* PongGameState = GetGameState<APongGameState>())
+	{
+		PongGameState->BroadcastRoundStartEvent();
 	}
 }
 

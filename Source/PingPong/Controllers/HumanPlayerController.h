@@ -8,6 +8,7 @@
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
+class UUserWidget;
 
 UCLASS()
 class PINGPONG_API AHumanPlayerController : public APongControllerBase
@@ -23,6 +24,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	float InputSensitivity;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UUserWidget* HUDWidget;
 
 public:
 	AHumanPlayerController();

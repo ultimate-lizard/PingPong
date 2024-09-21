@@ -7,6 +7,8 @@
 
 class ABall;
 
+
+
 UCLASS()
 class PINGPONG_API APongGameMode : public AGameModeBase
 {
@@ -21,6 +23,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float RoundStartDelay;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float GameCommenceDelay;
 
 public:
 	APongGameMode();

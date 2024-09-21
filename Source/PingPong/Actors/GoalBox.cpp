@@ -30,7 +30,7 @@ void AGoalBox::OnBallBeginOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 	{
 		if (APongGameMode* PongGameMode = World->GetAuthGameMode<APongGameMode>())
 		{
-			PongGameMode->Score(0);
+			PongGameMode->Score(PlayerIndex);
 		}
 	}
 }
