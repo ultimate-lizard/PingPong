@@ -1,13 +1,30 @@
 #include "PongGameMode.h"
 
 #include "Actors/PongPlayerStart.h"
+#include "Actors/Ball.h"
+#include "Actors/Paddle.h"
 #include "Camera/CameraActor.h"
 #include "Controllers/PongControllerBase.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/GameState.h"
+#include "GameFramework/PlayerState.h"
 
 APongGameMode::APongGameMode()
 {
 	MaxPlayers = 2;
+	MatchStartDelay = 5.0f;
+	RoundStartDelay = 3.0f;
+	bMatchInProgress = false;
+	Ball = nullptr;
+}
+
+void APongGameMode::StartPlay()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Waiting for players"));
+
+	SetPlayersInputEnabled(false);
+
+	Ball = Cast<ABall>(UGameplayStatics::GetActorOfClass(GetWorld(), ABall::StaticClass()));
 }
 
 void APongGameMode::RestartPlayerAtPlayerStart(AController* NewPlayer, AActor* StartSpot)
@@ -57,6 +74,62 @@ void APongGameMode::PreLogin(const FString& Options, const FString& Address, con
 	Super::PreLogin(Options, Address, UniqueId, ErrorMessage);
 }
 
+void APongGameMode::PostLogin(APlayerController* NewPlayer)
+{
+	Super::PostLogin(NewPlayer);
+
+	if (GetNumPlayers() >= MaxPlayers)
+	{
+		StartMatch();
+	}
+}
+
+void APongGameMode::StartMatch()
+{
+	Super::StartPlay();
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Match has started"));
+
+	bMatchInProgress = true;
+
+	if (UWorld* World = GetWorld())
+	{
+		World->GetTimerManager().SetTimer(MatchDelayTimer, this, &APongGameMode::StartRound, MatchStartDelay, false);
+	}
+}
+
+bool APongGameMode::IsMatchInProgress() const
+{
+	return bMatchInProgress;
+}
+
+void APongGameMode::Score(int32 LostPlayerIndex)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Score!"));
+
+	SetPlayersInputEnabled(false);
+
+	Ball->ResetBall();
+	ResetPlayers();
+
+	if (UWorld* World = GetWorld())
+	{
+		World->GetTimerManager().SetTimer(MatchDelayTimer, this, &APongGameMode::StartRound, RoundStartDelay, false);
+	}
+}
+
+void APongGameMode::StartRound()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("Round has started"));
+
+	SetPlayersInputEnabled(true);
+
+	if (Ball)
+	{
+		Ball->ActivateBall();
+	}
+}
+
 FString APongGameMode::InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId, const FString& Options, const FString& Portal)
 {
 	if (APongControllerBase* PlayerController = Cast<APongControllerBase>(NewPlayerController))
@@ -65,4 +138,41 @@ FString APongGameMode::InitNewPlayer(APlayerController* NewPlayerController, con
 	}
 
 	return Super::InitNewPlayer(NewPlayerController, UniqueId, Options, Portal);
+}
+
+void APongGameMode::SetPlayersInputEnabled(bool bEnabled)
+{
+	if (AGameStateBase* CurrentGameState = GetGameState<AGameStateBase>())
+	{
+		for (TObjectPtr<APlayerState>& Player : CurrentGameState->PlayerArray)
+		{
+			if (APlayerState* PlayerState = Player.Get())
+			{
+				if (APlayerController* PlayerController = PlayerState->GetPlayerController())
+				{
+					if (APawn* PlayerPawn = PlayerController->GetPawn())
+					{
+						bEnabled ? PlayerPawn->EnableInput(PlayerController) : PlayerPawn->DisableInput(PlayerController);
+					}
+				}
+			}
+		}
+	}
+}
+
+void APongGameMode::ResetPlayers()
+{
+	if (AGameStateBase* CurrentGameState = GetGameState<AGameStateBase>())
+	{
+		for (TObjectPtr<APlayerState>& Player : CurrentGameState->PlayerArray)
+		{
+			if (APlayerState* PlayerState = Player.Get())
+			{
+				if (APaddle* PaddlePawn = PlayerState->GetPawn<APaddle>())
+				{
+					PaddlePawn->ResetPaddle();
+				}
+			}
+		}
+	}
 }

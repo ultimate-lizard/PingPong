@@ -2,6 +2,8 @@
 
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "GameFramework/GameState.h"
+#include "GameModes/PongGameMode.h"
 
 AHumanPlayerController::AHumanPlayerController()
 {

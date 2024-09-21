@@ -61,7 +61,10 @@ void APongControllerBase::ServerAddMovementInput_Implementation(float MovementVa
 {
 	if (APawn* CurrentPawn = GetPawn())
 	{
-		CurrentPawn->AddActorWorldOffset(CurrentPawn->GetActorRightVector() * MovementValue, true);
+		if (CurrentPawn->InputEnabled())
+		{
+			CurrentPawn->AddActorWorldOffset(CurrentPawn->GetActorRightVector() * MovementValue, true);
+		}
 	}
 }
 

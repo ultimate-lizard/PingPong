@@ -10,9 +10,14 @@ class PINGPONG_API APaddle : public APawn
 	GENERATED_BODY()
 
 public:
+	APaddle();
+	virtual void BeginPlay() override;
+
+	void ResetPaddle();
+
+protected:
 	UPROPERTY(EditDefaultsOnly)
 	UStaticMeshComponent* PaddleMesh;
 
-public:
-	APaddle();
+	FVector InitialLocation;
 };
