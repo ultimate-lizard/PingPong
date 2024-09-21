@@ -57,6 +57,14 @@ void APongControllerBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 	DOREPLIFETIME(APongControllerBase, PlayerCamera);
 }
 
+void APongControllerBase::ServerAddMovementInput_Implementation(float MovementValue)
+{
+	if (APawn* CurrentPawn = GetPawn())
+	{
+		CurrentPawn->AddActorWorldOffset(CurrentPawn->GetActorRightVector() * MovementValue, true);
+	}
+}
+
 void APongControllerBase::OnRep_PlayerCamera()
 {
 	if (PlayerCamera && GetViewTarget() != PlayerCamera)

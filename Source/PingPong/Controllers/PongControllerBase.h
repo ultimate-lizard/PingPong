@@ -9,7 +9,7 @@ UCLASS()
 class PINGPONG_API APongControllerBase : public APlayerController
 {
 	GENERATED_BODY()
-	
+
 public:
 	APongControllerBase();
 
@@ -24,6 +24,9 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
+	UFUNCTION(Server, Unreliable)
+	void ServerAddMovementInput(float MovementValue);
+
 	UFUNCTION()
 	void OnRep_PlayerCamera();
 
