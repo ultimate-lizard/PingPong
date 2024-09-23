@@ -17,18 +17,16 @@ void AMainMenuController::OnPossess(APawn* PossessedPawn)
 	{
 		MainMenuWidget->SetOwningPlayer(this);
 		MainMenuWidget->AddToViewport();
-
-		FInputModeGameAndUI InputMode;
-		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockOnCapture);
-
-		SetInputMode(InputMode);
 	}
+
+	FInputModeUIOnly InputMode;
+	SetInputMode(InputMode);
 }
 
 void AMainMenuController::OnUnPossess()
 {
-	Super::OnUnPossess();
+	FInputModeGameOnly InputMode;
+	SetInputMode(InputMode);
 
-	SetShowMouseCursor(false);
-	SetInputMode(FInputModeGameAndUI());
+	Super::OnUnPossess();
 }
