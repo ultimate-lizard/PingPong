@@ -82,7 +82,7 @@ void APongGameState::SetMaxPlayers(int32 NewMaxPlayers)
 	MaxPlayers = NewMaxPlayers;
 }
 
-void APongGameState::OnRep_Score()
+void APongGameState::OnRep_Scores()
 {
 	OnScoreUpdate.Broadcast();
 }

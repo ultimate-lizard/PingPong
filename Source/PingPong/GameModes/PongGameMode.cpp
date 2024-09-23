@@ -126,6 +126,7 @@ void APongGameMode::Score(int32 ScoredPlayer)
 	if (APongGameState* PongGameState = GetGameState<APongGameState>())
 	{
 		PongGameState->Score(ScoredPlayer);
+		PongGameState->BroadcastOnScoreEvent(ScoredPlayer);
 	}
 }
 

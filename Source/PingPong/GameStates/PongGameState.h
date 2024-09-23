@@ -60,14 +60,14 @@ public:
 	void SetMaxPlayers(int32 NewMaxPlayers);
 
 protected:
-	UPROPERTY(ReplicatedUsing=OnRep_Score)
+	UPROPERTY(ReplicatedUsing=OnRep_Scores)
 	TArray<int32> Scores;
 
 	UPROPERTY(ReplicatedUsing=OnRep_MaxPlayers)
 	int32 MaxPlayers;
 
 	UFUNCTION()
-	void OnRep_Score();
+	void OnRep_Scores();
 
 	UFUNCTION()
 	void OnRep_MaxPlayers();
