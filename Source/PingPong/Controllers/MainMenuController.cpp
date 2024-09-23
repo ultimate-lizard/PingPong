@@ -1,17 +1,15 @@
 #include "Controllers/MainMenuController.h"
 
 #include "Blueprint/UserWidget.h"
-#include "OnlineSubsystem.h"
-#include "Interfaces/OnlineSessionInterface.h"
 
 AMainMenuController::AMainMenuController()
 {
 	MainMenuWidget = nullptr;
 }
 
-void AMainMenuController::BeginPlay()
+void AMainMenuController::OnPossess(APawn* PossessedPawn)
 {
-	Super::BeginPlay();
+	Super::OnPossess(PossessedPawn);
 
 	SetShowMouseCursor(true);
 
@@ -27,17 +25,10 @@ void AMainMenuController::BeginPlay()
 	}
 }
 
-void AMainMenuController::EndPlay(const EEndPlayReason::Type EndPlayReason)
+void AMainMenuController::OnUnPossess()
 {
-	Super::EndPlay(EndPlayReason);
+	Super::OnUnPossess();
 
 	SetShowMouseCursor(false);
-
-	if (IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get())
-	{
-		if (IOnlineSessionPtr SessionInterface = OnlineSubsystem->GetSessionInterface())
-		{
-			SessionInterface->DestroySession(NAME_GameSession);
-		}
-	}
+	SetInputMode(FInputModeGameAndUI());
 }

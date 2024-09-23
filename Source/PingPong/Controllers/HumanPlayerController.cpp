@@ -6,6 +6,8 @@
 #include "GameModes/PongGameMode.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "OnlineSubsystem.h"
+#include "Interfaces/OnlineSessionInterface.h"
 
 AHumanPlayerController::AHumanPlayerController()
 {
@@ -56,5 +58,13 @@ void AHumanPlayerController::Move(const FInputActionValue& Value)
 
 void AHumanPlayerController::QuitGame(const FInputActionValue& Value)
 {
+	if (IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get())
+	{
+		if (IOnlineSessionPtr SessionInterface = OnlineSubsystem->GetSessionInterface())
+		{
+			SessionInterface->DestroySession(NAME_GameSession);
+		}
+	}
+
 	UGameplayStatics::OpenLevel(GetWorld(), TEXT("MainMenu"));
 }
