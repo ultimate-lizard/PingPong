@@ -13,8 +13,8 @@
 APongGameMode::APongGameMode()
 {
 	MaxPlayers = 2;
-	MatchStartDelay = 5.0f;
-	RoundStartDelay = 3.0f;
+	MatchStartDelay = 3.0f;
+	RoundStartDelay = 2.0f;
 	GameCommenceDelay = 1.0f;
 	bMatchInProgress = false;
 	Ball = nullptr;
@@ -114,10 +114,8 @@ bool APongGameMode::IsMatchInProgress() const
 	return bMatchInProgress;
 }
 
-void APongGameMode::Score(int32 LostPlayerIndex)
+void APongGameMode::Score(int32 ScoredPlayer)
 {
-	// SetPlayersInputEnabled(false);
-
 	Ball->ResetBall();
 
 	if (UWorld* World = GetWorld())
@@ -127,7 +125,7 @@ void APongGameMode::Score(int32 LostPlayerIndex)
 
 	if (APongGameState* PongGameState = GetGameState<APongGameState>())
 	{
-		PongGameState->BroadcastOnScoreEvent(LostPlayerIndex);
+		PongGameState->Score(ScoredPlayer);
 	}
 }
 

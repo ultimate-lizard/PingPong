@@ -3,6 +3,7 @@
 #include "Camera/CameraActor.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/PlayerState.h"
+#include "GameStates/PongGameState.h"
 
 APongControllerBase::APongControllerBase()
 {
@@ -50,11 +51,25 @@ int32 APongControllerBase::GetPlayerIndex() const
 	return PlayerIndex;
 }
 
+int32 APongControllerBase::GetAwayPlayerIndex() const
+{
+	if (UWorld* World = GetWorld())
+	{
+		if (APongGameState* PongGameState = World->GetGameState<APongGameState>())
+		{
+			return PongGameState->GetMaxPlayers() - 1 - GetPlayerIndex();
+		}
+	}
+	
+	return 0;
+}
+
 void APongControllerBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(APongControllerBase, PlayerCamera);
+	DOREPLIFETIME(APongControllerBase, PlayerIndex);
 }
 
 void APongControllerBase::ServerAddMovementInput_Implementation(float MovementValue)

@@ -11,13 +11,20 @@ class PINGPONG_API APongControllerBase : public APlayerController
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintPure)
+	int32 GetPlayerIndex() const;
+
+	UFUNCTION(BlueprintPure)
+	int32 GetAwayPlayerIndex() const;
+
+	UFUNCTION(BlueprintPure)
+	ACameraActor* GetPlayerCamera();
+
+public:
 	APongControllerBase();
 
 	void SetPlayerCamera(ACameraActor* CameraActor);
-	ACameraActor* GetPlayerCamera();
-
 	void SetPlayerIndex(int32 Index);
-	int32 GetPlayerIndex() const;
 
 	virtual void OnPossess(APawn* PossessedPawn) override;
 	virtual void ClientRestart_Implementation(APawn* NewPawn) override;
@@ -30,8 +37,9 @@ protected:
 	UFUNCTION()
 	void OnRep_PlayerCamera();
 
-	UPROPERTY(ReplicatedUsing = OnRep_PlayerCamera)
+	UPROPERTY(ReplicatedUsing = OnRep_PlayerCamera, BlueprintReadOnly)
 	ACameraActor* PlayerCamera;
 
+	UPROPERTY(Replicated, BlueprintReadOnly)
 	int32 PlayerIndex;
 };

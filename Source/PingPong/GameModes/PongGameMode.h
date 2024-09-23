@@ -7,8 +7,6 @@
 
 class ABall;
 
-
-
 UCLASS()
 class PINGPONG_API APongGameMode : public AGameModeBase
 {
@@ -41,7 +39,7 @@ public:
 	void StartMatch();
 	bool IsMatchInProgress() const;
 
-	void Score(int32 LostPlayerIndex);
+	void Score(int32 ScoredPlayer);
 
 protected:
 	virtual FString InitNewPlayer(APlayerController* NewPlayerController, const FUniqueNetIdRepl& UniqueId, const FString& Options, const FString& Portal = TEXT("")) override;

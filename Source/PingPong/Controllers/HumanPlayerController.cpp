@@ -28,8 +28,9 @@ void AHumanPlayerController::BeginPlay()
 		InputSubsystem->AddMappingContext(DefaultMappingContext, 0);
 	}
 
-	if (HUDWidget)
+	if (HUDWidget && IsLocalController())
 	{
+		HUDWidget->SetOwningPlayer(this);
 		HUDWidget->AddToViewport();
 	}
 }
