@@ -7,6 +7,7 @@
 
 APongControllerBase::APongControllerBase()
 {
+	ControlSensitivity = 200.0f;
 	PlayerCamera = nullptr;
 	PlayerIndex = 0;
 }
@@ -78,7 +79,7 @@ void APongControllerBase::ServerAddMovementInput_Implementation(float MovementVa
 	{
 		if (CurrentPawn->InputEnabled())
 		{
-			CurrentPawn->AddActorWorldOffset(CurrentPawn->GetActorRightVector() * MovementValue, true);
+			CurrentPawn->AddActorWorldOffset(CurrentPawn->GetActorRightVector() * MovementValue * ControlSensitivity, true);
 		}
 	}
 }

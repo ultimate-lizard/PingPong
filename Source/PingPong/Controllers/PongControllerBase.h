@@ -11,6 +11,9 @@ class PINGPONG_API APongControllerBase : public APlayerController
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float ControlSensitivity;
+
 	UFUNCTION(BlueprintPure)
 	int32 GetPlayerIndex() const;
 

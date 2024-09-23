@@ -6,7 +6,7 @@ ABall::ABall()
 	bReplicates = true;
 	SetReplicateMovement(true);
 
-	BallSpeed = 700.0f;
+	BallSpeed = 900.0f;
 
 	BallMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ball Mesh"));
 	BallMesh->CastShadow = false;

@@ -52,7 +52,7 @@ void AHumanPlayerController::SetupInputComponent()
 
 void AHumanPlayerController::Move(const FInputActionValue& Value)
 {
-	const float MovementValue = Value.Get<float>();
+	const float MovementValue = Value.Get<float>() * UGameplayStatics::GetWorldDeltaSeconds(GetWorld());
 	ServerAddMovementInput(MovementValue * InputSensitivity);
 }
 
