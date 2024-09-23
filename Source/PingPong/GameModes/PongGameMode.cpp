@@ -95,6 +95,13 @@ void APongGameMode::PostLogin(APlayerController* NewPlayer)
 	}
 }
 
+void APongGameMode::Logout(AController* Exiting)
+{
+	Super::Logout(Exiting);
+
+	EndMatch();
+}
+
 void APongGameMode::StartMatch()
 {
 	bMatchInProgress = true;
@@ -107,6 +114,29 @@ void APongGameMode::StartMatch()
 	if (APongGameState* PongGameState = GetGameState<APongGameState>())
 	{
 		PongGameState->BroadcastMatchStartEvent();
+	}
+}
+
+void APongGameMode::EndMatch()
+{
+	SetPlayersInputEnabled(false);
+
+	if (Ball)
+	{
+		Ball->ResetBall();
+	}
+
+	ResetPlayers();
+
+	if (APongGameState* PongGameState = GetGameState<APongGameState>())
+	{
+		PongGameState->ResetScore();
+		PongGameState->BroadcastMatchEndEvent();
+	}
+
+	if (UWorld* World = GetWorld())
+	{
+		World->GetTimerManager().ClearTimer(MatchDelayTimer);
 	}
 }
 

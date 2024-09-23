@@ -34,8 +34,10 @@ public:
 
 	virtual void PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;
 	virtual void PostLogin(APlayerController* NewPlayer) override;
+	virtual void Logout(AController* Exiting) override;
 
 	void StartMatch();
+	void EndMatch();
 	bool IsMatchInProgress() const;
 
 	void Score(int32 ScoredPlayer);

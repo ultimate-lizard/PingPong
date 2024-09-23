@@ -58,6 +58,8 @@ public:
 	void Score(int32 ScoredPlayerIndex);
 	void SetMaxPlayers(int32 NewMaxPlayers);
 
+	void ResetScore();
+
 protected:
 	UPROPERTY(ReplicatedUsing=OnRep_Scores)
 	TArray<int32> Scores;
