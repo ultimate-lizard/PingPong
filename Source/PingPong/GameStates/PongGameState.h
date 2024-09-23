@@ -50,7 +50,6 @@ public:
 	UFUNCTION(BlueprintPure)
 	int32 GetMaxPlayers() const;
 
-public:
 	APongGameState();
 
 	virtual void BeginPlay() override;

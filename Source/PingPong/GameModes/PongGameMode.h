@@ -25,7 +25,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float GameCommenceDelay;
 
-public:
 	APongGameMode();
 
 	virtual void StartPlay() override;
@@ -51,8 +50,6 @@ protected:
 	void StartRound();
 
 	bool bMatchInProgress;
-
 	FTimerHandle MatchDelayTimer;
-
 	ABall* Ball;
 };

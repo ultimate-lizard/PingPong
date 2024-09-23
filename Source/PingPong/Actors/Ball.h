@@ -14,7 +14,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	float BallSpeed;
 
-public:	
 	ABall();
 
 	virtual void BeginPlay() override;
@@ -32,8 +31,6 @@ protected:
 	void OnBallHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	bool bActivated;
-
 	FVector InitialLocation;
-
 	FVector2D Direction;
 };

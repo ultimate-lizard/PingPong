@@ -20,7 +20,6 @@ public:
 	UFUNCTION(BlueprintPure)
 	ACameraActor* GetPlayerCamera();
 
-public:
 	APongControllerBase();
 
 	void SetPlayerCamera(ACameraActor* CameraActor);

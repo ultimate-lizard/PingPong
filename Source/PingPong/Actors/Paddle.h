@@ -11,6 +11,7 @@ class PINGPONG_API APaddle : public APawn
 
 public:
 	APaddle();
+
 	virtual void BeginPlay() override;
 
 	void ResetPaddle();

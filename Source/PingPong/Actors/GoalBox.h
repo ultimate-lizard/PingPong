@@ -14,8 +14,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 PlayerIndex;
 
-public:
 	AGoalBox();
+
 	virtual void BeginPlay() override;
 
 protected:

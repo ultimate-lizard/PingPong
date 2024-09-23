@@ -22,14 +22,17 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* MovementAction;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* QuitGameAction;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	float InputSensitivity;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UUserWidget* HUDWidget;
 
-public:
 	AHumanPlayerController();
+
 	virtual void BeginPlay() override;
 
 protected:
@@ -37,4 +40,7 @@ protected:
 
 	UFUNCTION()
 	void Move(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void QuitGame(const FInputActionValue& Value);
 };

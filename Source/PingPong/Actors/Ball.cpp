@@ -22,7 +22,6 @@ void ABall::BeginPlay()
 	Super::BeginPlay();
 	
 	InitialLocation = GetActorLocation();
-
 	BallMesh->OnComponentHit.AddDynamic(this, &ABall::OnBallHit);
 }
 
@@ -50,6 +49,7 @@ void ABall::ActivateBall()
 
 	Direction = FVector2D(0.5f, 0.5f);
 	Direction.Normalize();
+
 	if (FMath::RandBool())
 	{
 		Direction = -Direction;

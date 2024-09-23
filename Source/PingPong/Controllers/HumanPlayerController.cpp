@@ -5,11 +5,13 @@
 #include "GameFramework/GameState.h"
 #include "GameModes/PongGameMode.h"
 #include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
 
 AHumanPlayerController::AHumanPlayerController()
 {
 	DefaultMappingContext = nullptr;
 	MovementAction = nullptr;
+	QuitGameAction = nullptr;
 	InputSensitivity = 10.0f;
 	HUDWidget = nullptr;
 }
@@ -42,11 +44,17 @@ void AHumanPlayerController::SetupInputComponent()
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{
 		EnhancedInputComponent->BindAction(MovementAction, ETriggerEvent::Triggered, this, &AHumanPlayerController::Move);
+		EnhancedInputComponent->BindAction(QuitGameAction, ETriggerEvent::Started, this, &AHumanPlayerController::QuitGame);
 	}
 }
 
 void AHumanPlayerController::Move(const FInputActionValue& Value)
 {
-	float MovementValue = Value.Get<float>();
+	const float MovementValue = Value.Get<float>();
 	ServerAddMovementInput(MovementValue * InputSensitivity);
+}
+
+void AHumanPlayerController::QuitGame(const FInputActionValue& Value)
+{
+	UGameplayStatics::OpenLevel(GetWorld(), TEXT("MainMenu"));
 }

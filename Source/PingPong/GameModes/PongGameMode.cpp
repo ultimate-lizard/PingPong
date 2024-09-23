@@ -66,6 +66,7 @@ void APongGameMode::PreLogin(const FString& Options, const FString& Address, con
 {
 	if (GetNumPlayers() >= MaxPlayers)
 	{
+		ErrorMessage = TEXT("The server is full!");
 		FGameModeEvents::GameModePreLoginEvent.Broadcast(this, UniqueId, ErrorMessage);
 		return;
 	}
